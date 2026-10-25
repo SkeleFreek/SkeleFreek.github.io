@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ✏️ BROWSER TAB TITLE -->
+  <title>Eva Fuhrman · Portfolio</title>
+
+  <!-- Remove this line if you want search engines to index the site -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap">
+
+<style>
+/* ==========================================================================
+   🎨 COLOURS & THEME  — change these values to recolour the whole site
+   ========================================================================== */
+:root {
+  /* Main colours */
+  --nb-bg:     #fdf8f0;   /* page background */
+  --nb-fg:     #1a1410;   /* text colour */
+  --nb-border: #1a1410;   /* outlines + hard shadows */
+
+  /* Accent palette (used by cards, stickers, badges, shelf items) */
+  --nb-coral:  #efa898;
+  --nb-purple: #b5aaeb;
+  --nb-yellow: #f0dc98;
+  --nb-teal:   #96cec4;
+  --nb-pink:   #eeb8ce;
+  --nb-lime:   #bce89a;
+
+  /* Style tweaks */
+  --nb-border-w: 2px;
+  --nb-shadow-off: 4px;
+  --nb-shadow: var(--nb-shadow-off) var(--nb-shadow-off) 0 var(--nb-border);
+  --nb-radius: 10px;
+
+  /* Fonts */
+  --font-display: "Archivo Black", sans-serif;
+  --font-body:    "DM Sans", sans-serif;
+  --font-mono:    "JetBrains Mono", monospace;
+
+  /* Animation (leave alone unless you know what you're doing) */
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --t-fast: .15s;
+  --t-med: .32s;
+}
+
+/* ==========================================================================
+   BASE / RESET
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid; }
+html { scroll-behavior: smooth; line-height: 1.5; -webkit-text-size-adjust: 100%; }
+h1, h2, h3 { font-size: inherit; font-weight: inherit; }
+ol, ul { list-style: none; }
+button, input { font: inherit; letter-spacing: inherit; color: inherit; background-color: transparent; border-radius: 0; }
+textarea { resize: vertical; }
+img { display: block; max-width: 100%; height: auto; vertical-align: middle; }
+a { color: inherit; text-decoration: none; }
+
+body {
+  background: var(--nb-bg);
+  color: var(--nb-fg);
+  font-family: var(--font-body);
+  cursor: none;                 /* custom cursor replaces it */
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+/* Paper-grain overlay */
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 9000;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-thumb { background: var(--nb-fg); border-radius: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ==========================================================================
+   CUSTOM CURSOR
+   ========================================================================== */
+.cursor-dot  { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: var(--nb-fg); border-radius: 50%; pointer-events: none; z-index: 9999; will-change: transform; transition: width .2s, height .2s, background .2s; }
+.cursor-ring { position: fixed; top: 0; left: 0; width: 30px; height: 30px; border: 2px solid var(--nb-fg); border-radius: 50%; opacity: .35; pointer-events: none; z-index: 9998; will-change: transform; transition: width .2s, height .2s, opacity .2s, border-color .2s; }
+.cursor-dot.hovered  { background: var(--nb-purple); width: 14px; height: 14px; }
+.cursor-ring.hovered { border-color: var(--nb-purple); opacity: .2; width: 46px; height: 46px; }
+
+/* ==========================================================================
+   ANIMATIONS (scroll reveal, kinetic headline, marquee)
+   ========================================================================== */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s var(--ease-out), transform .6s var(--ease-spring); }
+.reveal.revealed { opacity: 1; transform: translateY(0); }
+.stagger > .reveal:first-child { transition-delay: 0s; }
+.stagger > .reveal:nth-child(2) { transition-delay: 70ms; }
+.stagger > .reveal:nth-child(3) { transition-delay: .14s; }
+.stagger > .reveal:nth-child(4) { transition-delay: .21s; }
+.stagger > .reveal:nth-child(5) { transition-delay: .28s; }
+.stagger > .reveal:nth-child(n+6) { transition-delay: .35s; }
+
+.kinetic-word { display: inline-block; animation: kineticIn .65s var(--ease-spring) both; }
+@keyframes kineticIn {
+  0%   { opacity: 0; transform: translateY(44px) skew(-5deg); }
+  100% { opacity: 1; transform: translateY(0) skew(0deg); }
+}
+
+.marquee-wrap { background: var(--nb-fg); border-top: var(--nb-border-w) solid var(--nb-border); border-bottom: var(--nb-border-w) solid var(--nb-border); padding: .6rem 0; overflow: hidden; }
+.marquee-track { display: flex; width: max-content; animation: marquee 22s linear infinite; }
+.marquee-wrap.reverse .marquee-track { animation-direction: reverse; }
+.marquee-item { font-family: var(--font-display); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--nb-bg); white-space: nowrap; padding: 0 2rem; }
+.marquee-gem { color: var(--nb-yellow); margin-left: 1.5rem; }
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* ==========================================================================
+   NAVBAR
+   ========================================================================== */
+.navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.2rem 0; transition: background var(--t-med), border-bottom var(--t-med); }
+.navbar.scrolled { background: color-mix(in srgb, var(--nb-bg) 92%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: var(--nb-border-w) solid var(--nb-border); }
+.navbar-inner { display: flex; align-items: center; gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+.nb-logo { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: .04em; margin-right: auto; }
+.nb-logo-accent { color: var(--nb-coral); }
+.navbar-links { display: flex; gap: 2rem; }
+@media (max-width: 768px) { .navbar-links { display: none; } }
+.nb-nav-link { position: relative; font-family: var(--font-mono); font-size: .76rem; text-transform: uppercase; letter-spacing: .09em; transition: color var(--t-fast); }
+.nb-nav-link::after { content: ""; position: absolute; left: 0; bottom: -3px; width: 0; height: 2px; background: var(--nb-purple); transition: width var(--t-med) var(--ease-spring); }
+.nb-nav-link:hover { color: var(--nb-purple); }
+.nb-nav-link:hover::after { width: 100%; }
+.nb-nav-link.active { background: var(--nb-yellow); color: var(--nb-fg); border: var(--nb-border-w) solid var(--nb-border); box-shadow: 2px 2px 0 var(--nb-border); border-radius: 5px; padding: .15rem .45rem; }
+.nb-nav-link.active::after { display: none; }
+
+/* ==========================================================================
+   BUTTONS, BADGES, TAGS
+   ========================================================================== */
+.nb-btn { display: inline-flex; align-items: center; gap: .5rem; padding: .75rem 1.5rem; font-family: var(--font-body); font-size: .9rem; font-weight: 600; white-space: nowrap; user-select: none; cursor: none; border: var(--nb-border-w) solid var(--nb-border); border-radius: var(--nb-radius); box-shadow: var(--nb-shadow); transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-med), color var(--t-med); }
+.nb-btn:hover  { box-shadow: 6px 6px 0 var(--nb-border); transform: translate(-2px, -2px); }
+.nb-btn:active { box-shadow: 2px 2px 0 var(--nb-border); transform: translate(2px, 2px); }
+.nb-btn--primary { background: var(--nb-fg); color: var(--nb-bg); }
+.nb-btn--primary:hover { background: var(--nb-purple); color: var(--nb-fg); }
+.nb-btn--outline { background: var(--nb-bg); color: var(--nb-fg); }
+.nb-btn--outline:hover { background: var(--nb-coral); }
+.nb-btn--sm { background: var(--nb-yellow); border-radius: 100px; padding: .42rem .9rem; font-size: .76rem; }
+.nb-btn--sm:hover { background: var(--nb-pink); }
+
+.nb-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .25rem .7rem; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; border: var(--nb-border-w) solid var(--nb-border); box-shadow: 3px 3px 0 var(--nb-border); border-radius: 100px; }
+.nb-badge--yellow { background: var(--nb-yellow); }
+.nb-badge--teal   { background: var(--nb-teal); }
+
+.nb-tag { display: inline-block; padding: .16rem .52rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .03em; border: var(--nb-border-w) solid var(--nb-border); border-radius: 4px; background: color-mix(in srgb, var(--tag-color, var(--nb-bg)) 35%, white); }
+
+/* ==========================================================================
+   SECTIONS (shared)
+   ========================================================================== */
+.section { max-width: 1200px; margin: 0 auto; padding: 6rem 2rem; }
+.section-header { margin-bottom: 3rem; }
+.section-label { display: block; margin-bottom: .75rem; font-family: var(--font-mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .18em; opacity: .4; }
+.section-title { font-family: var(--font-display); font-size: clamp(1.9rem, 5vw, 3.2rem); line-height: 1.05; letter-spacing: -.02em; }
+.section-title em { font-family: var(--font-body); font-style: italic; font-weight: 400; color: var(--nb-coral); }
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.hero-section { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 3rem; max-width: 1200px; min-height: 100vh; margin: 0 auto; padding: 9rem 2rem 5rem; }
+@media (max-width: 900px) { .hero-section { grid-template-columns: 1fr; padding-top: 7rem; } .hero-image-col { order: -1; } }
+.hero-badges { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 1.5rem; }
+.hero-headline { font-family: var(--font-display); font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: 1; letter-spacing: -.025em; margin-bottom: 1.25rem; }
+.hero-headline-line2 { display: block; color: var(--nb-coral); }
+.hero-sub { max-width: 460px; margin-bottom: 2.25rem; font-size: 1rem; line-height: 1.72; opacity: .65; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+.hero-deco { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2.5rem; }
+.nb-sticker { padding: .35rem .78rem; font-family: var(--font-mono); font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; border: var(--nb-border-w) solid var(--nb-border); box-shadow: 3px 3px 0 var(--nb-border); border-radius: 5px; cursor: default; transition: transform var(--t-med) var(--ease-spring); }
+.nb-sticker:hover { transform: rotate(-4deg) scale(1.08) !important; }
+.nb-sticker--purple { background: var(--nb-purple); transform: rotate(-1.5deg); }
+.nb-sticker--coral  { background: var(--nb-coral);  transform: rotate(2deg); }
+.nb-sticker--yellow { background: var(--nb-yellow); transform: rotate(-2.5deg); }
+.nb-sticker--teal   { background: var(--nb-teal);   transform: rotate(1.5deg); }
+.hero-image-col { display: flex; justify-content: center; align-items: center; }
+.hero-frame { position: relative; width: 100%; max-width: 400px; overflow: hidden; border: var(--nb-border-w) solid var(--nb-border); border-radius: var(--nb-radius); box-shadow: 8px 8px 0 var(--nb-border); animation: float 5s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.hero-frame img { width: 100%; height: 500px; object-fit: cover; }
+.hero-frame-cap { background: var(--nb-fg); color: var(--nb-bg); font-family: var(--font-mono); font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; border-top: var(--nb-border-w) solid var(--nb-border); padding: .55rem 1rem; }
+
+/* ==========================================================================
+   WORK CARDS
+   ========================================================================== */
+.work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+@media (max-width: 768px) { .work-grid { grid-template-columns: 1fr; } }
+.work-card { overflow: hidden; background: var(--nb-bg); border: var(--nb-border-w) solid var(--nb-border); border-radius: var(--nb-radius); box-shadow: var(--nb-shadow); transition: transform var(--t-fast), box-shadow var(--t-fast); }
+.work-card:hover { box-shadow: 7px 7px 0 var(--nb-border); transform: translate(-3px, -3px); }
+.work-card-image { position: relative; overflow: hidden; }
+.work-card-image img { width: 100%; height: 240px; object-fit: cover; transition: transform .55s var(--ease-out), filter .35s; }
+.work-card:hover .work-card-image img { filter: saturate(1.1); transform: scale(1.04); }
+.work-card-year { position: absolute; top: .75rem; right: .75rem; padding: .16rem .45rem; font-family: var(--font-mono); font-size: .68rem; background: var(--nb-bg); border: var(--nb-border-w) solid var(--nb-border); box-shadow: 2px 2px 0 var(--nb-border); border-radius: 4px; }
+.work-card-body { padding: 1.2rem; border-top: var(--nb-border-w) solid var(--nb-border); background: var(--card-color, var(--nb-bg)); }
+.work-card-title { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: .7rem; }
+.work-card-tags { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .9rem; }
+.work-card-cta { position: relative; display: inline-flex; align-items: center; gap: .3rem; font-family: var(--font-mono); font-size: .76rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.work-card-cta::after { content: ""; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px; background: var(--nb-fg); transition: width var(--t-med) var(--ease-spring); }
+.work-card:hover .work-card-cta::after { width: 100%; }
+
+/* ==========================================================================
+   INSPIRATION SHELF (books / movies / videos)
+   ========================================================================== */
+.shelf-section { padding: 5rem 0 0; border-top: var(--nb-border-w) solid var(--nb-border); background: color-mix(in srgb, var(--nb-bg) 96%, var(--nb-fg) 4%); }
+.shelf-section-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem 5rem; }
+.shelf-header-row { margin-bottom: 2.5rem; }
+.shelf-desc { max-width: 520px; margin-top: .75rem; font-size: .9rem; line-height: 1.65; opacity: .55; }
+.collection-shelf { overflow: hidden; border: var(--nb-border-w) solid var(--nb-border); border-radius: var(--nb-radius); box-shadow: var(--nb-shadow); }
+.collection-header { display: flex; justify-content: space-between; align-items: center; padding: .7rem 1.25rem; background: var(--nb-fg); color: var(--nb-bg); border-bottom: var(--nb-border-w) solid var(--nb-border); }
+.collection-header-title { font-family: var(--font-display); font-size: .95rem; letter-spacing: .02em; }
+.collection-header-count { font-family: var(--font-mono); font-size: .68rem; opacity: .45; }
+.collection-body { display: grid; grid-template-columns: 1fr 1fr 1fr; overflow-x: auto; background: color-mix(in srgb, var(--nb-bg) 93%, var(--nb-fg) 7%); }
+@media (max-width: 900px) { .collection-body { grid-template-columns: 1fr; } .sub-shelf + .sub-shelf { border-top: var(--nb-border-w) solid var(--nb-border); border-left: none !important; } }
+.sub-shelf { padding: 1.25rem 1rem 0; overflow-x: auto; }
+.sub-shelf + .sub-shelf { border-left: var(--nb-border-w) solid var(--nb-border); }
+.sub-shelf-titlerow { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+.sub-shelf-label { font-family: var(--font-mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .12em; opacity: .45; }
+.sub-shelf-add { padding: .22rem .6rem; font-family: var(--font-mono); font-size: .65rem; text-transform: uppercase; letter-spacing: .07em; background: var(--nb-bg); border: var(--nb-border-w) solid var(--nb-border); box-shadow: 2px 2px 0 var(--nb-border); border-radius: 100px; cursor: none; transition: background var(--t-fast), transform var(--t-fast); }
+.sub-shelf-add:hover { background: var(--nb-lime); transform: translate(-1px, -1px); }
+.sub-shelf-items { display: flex; align-items: flex-end; gap: .75rem; min-height: 215px; padding-bottom: 0; overflow-x: auto; scrollbar-width: none; }
+.sub-shelf-items--video { flex-wrap: wrap; align-items: center; gap: .65rem; }
+.shelf-plank { height: 14px; background: var(--nb-fg); border-top: var(--nb-border-w) solid var(--nb-border); }
+
+/* Book */
+.book-spine { position: relative; display: flex; justify-content: center; align-items: center; flex-shrink: 0; width: var(--book-w, 46px); height: var(--book-h, 170px); overflow: hidden; background: var(--item-color, var(--nb-purple)); border: var(--nb-border-w) solid var(--nb-border); border-radius: 3px 8px 8px 3px; box-shadow: 2px 2px 0 var(--nb-border); cursor: none; transition: transform var(--t-med) var(--ease-spring), box-shadow var(--t-fast); }
+.book-spine::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 8px; background: #0000001f; border-right: 1px solid #00000014; }
+.book-spine:hover { box-shadow: 4px 4px 0 var(--nb-border); transform: translateY(-16px); }
+.book-spine:hover .item-remove { opacity: 1; }
+.book-title { writing-mode: vertical-rl; text-orientation: mixed; text-align: center; max-height: 85%; padding: .5rem .3rem; line-height: 1.25; color: var(--nb-fg); overflow: hidden; transform: rotate(180deg); }
+.book-year { position: absolute; bottom: 5px; font-family: var(--font-mono); font-size: .46rem; writing-mode: vertical-rl; opacity: .5; transform: rotate(180deg); }
+
+/* DVD */
+.dvd-case { position: relative; display: flex; flex-direction: column; flex-shrink: 0; width: 62px; height: 88px; overflow: hidden; background: var(--item-color, #111); border: var(--nb-border-w) solid var(--nb-border); border-radius: 3px; box-shadow: 2px 2px 0 var(--nb-border), inset -3px 0 0 #ffffff0d; cursor: none; transition: transform var(--t-med) var(--ease-spring), box-shadow var(--t-fast); }
+.dvd-case:hover { box-shadow: 5px 5px 0 var(--nb-border); transform: translateY(-12px) rotate(.5deg); }
+.dvd-case:hover .item-remove { opacity: 1; }
+.dvd-accent-bar { flex-shrink: 0; height: 7px; background: var(--accent-color, var(--nb-purple)); border-bottom: 1px solid #0006; }
+.dvd-disc { position: absolute; top: 50%; left: 50%; width: 30px; height: 30px; background: radial-gradient(circle at 35% 35%, #ffffff14, #ffffff03); border: 1.5px solid #ffffff1f; border-radius: 50%; transform: translate(-50%, -62%); }
+.dvd-disc-inner { position: absolute; top: 50%; left: 50%; width: 7px; height: 7px; background: #ffffff26; border: 1px solid #ffffff1a; border-radius: 50%; transform: translate(-50%, -50%); }
+.dvd-info { position: absolute; left: 0; right: 0; bottom: 0; padding: .3rem .4rem; background: #000000b3; border-top: 1px solid #ffffff0f; }
+.dvd-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-family: var(--font-display); font-size: .5rem; line-height: 1.2; text-transform: uppercase; letter-spacing: .04em; color: #ffffffe6; }
+.dvd-year { display: block; margin-top: 1px; font-family: var(--font-mono); font-size: .42rem; color: #ffffff59; }
+
+/* Video */
+.video-card { position: relative; display: flex; justify-content: center; align-items: center; flex-shrink: 0; width: 110px; height: 68px; overflow: hidden; background: var(--item-color, var(--nb-teal)); border: var(--nb-border-w) solid var(--nb-border); border-radius: 6px; box-shadow: 2px 2px 0 var(--nb-border); cursor: none; transition: transform var(--t-med) var(--ease-spring), box-shadow var(--t-fast); }
+.video-card::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, #0000, #0000 3px, #0000000a 3px 4px); }
+.video-card:hover { box-shadow: 4px 4px 0 var(--nb-border); transform: translateY(-10px); }
+.video-card:hover .item-remove { opacity: 1; }
+.video-play-btn { position: relative; z-index: 1; display: flex; justify-content: center; align-items: center; width: 26px; height: 26px; padding-left: 2px; font-size: 9px; background: var(--nb-fg); color: var(--nb-bg); border-radius: 50%; box-shadow: 0 2px 4px #0003; }
+.video-title-bar { position: absolute; left: 0; right: 0; bottom: 0; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; padding: .22rem .4rem; font-family: var(--font-body); font-size: .5rem; font-weight: 600; line-height: 1.2; background: var(--nb-fg); color: var(--nb-bg); }
+
+/* Remove (×) button + add form */
+.item-remove { position: absolute; top: -8px; right: -8px; z-index: 10; display: flex; justify-content: center; align-items: center; width: 20px; height: 20px; font-size: 10px; line-height: 1; background: var(--nb-fg); color: var(--nb-bg); border: var(--nb-border-w) solid var(--nb-border); border-radius: 50%; opacity: 0; cursor: none; transition: opacity var(--t-fast); }
+.shelf-add-form { display: flex; flex-direction: column; flex-shrink: 0; align-self: center; gap: .5rem; min-width: 180px; padding: .75rem; background: var(--nb-bg); border: var(--nb-border-w) dashed var(--nb-border); border-radius: var(--nb-radius); box-shadow: var(--nb-shadow); animation: formSlideIn .3s var(--ease-spring) both; }
+@keyframes formSlideIn { 0% { opacity: 0; transform: scale(.9) translateY(8px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+.nb-input { width: 100%; padding: .4rem .6rem; font-family: var(--font-body); font-size: .8rem; background: var(--nb-bg); color: var(--nb-fg); border: var(--nb-border-w) solid var(--nb-border); border-radius: 6px; outline: none; transition: box-shadow var(--t-fast); }
+.nb-input:focus { box-shadow: 0 0 0 3px var(--nb-purple); }
+.nb-input::placeholder { opacity: .4; }
+.color-swatches { display: flex; flex-wrap: wrap; gap: .35rem; }
+.color-swatch { flex-shrink: 0; width: 18px; height: 18px; border: 2px solid transparent; border-radius: 50%; cursor: none; transition: transform var(--t-fast), border-color var(--t-fast); }
+.color-swatch:hover { transform: scale(1.15); }
+.color-swatch.active { border-color: var(--nb-fg); transform: scale(1.1); }
+.form-actions { display: flex; gap: .35rem; }
+.form-actions .nb-btn { flex: 1; justify-content: center; padding: .35rem .5rem; font-size: .72rem; }
+
+/* ==========================================================================
+   SOCIALS / CONTACT
+   ========================================================================== */
+.socials-list { display: flex; flex-direction: column; gap: 1rem; }
+.social-row { display: flex; align-items: center; gap: 1.5rem; padding: 1.1rem 1.4rem; background: var(--card-color, var(--nb-bg)); border: var(--nb-border-w) solid var(--nb-border); border-radius: var(--nb-radius); box-shadow: var(--nb-shadow); cursor: none; transition: transform var(--t-fast), box-shadow var(--t-fast); }
+.social-row:hover { box-shadow: 7px 7px 0 var(--nb-border); transform: translate(-3px, -3px); }
+.social-platform { min-width: 160px; font-family: var(--font-display); font-size: 1.05rem; }
+.social-handle { flex: 1; font-family: var(--font-mono); font-size: .8rem; opacity: .55; }
+.social-arrow { font-size: 1.2rem; transition: transform var(--t-med) var(--ease-spring); }
+.social-row:hover .social-arrow { transform: translateX(7px); }
+.contact-cta { margin-top: 3.5rem; text-align: center; }
+.contact-cta p { margin-bottom: .75rem; font-family: var(--font-mono); font-size: .75rem; text-transform: uppercase; letter-spacing: .14em; opacity: .45; }
+.contact-email { display: inline-block; font-family: var(--font-display); font-size: clamp(1.3rem, 4vw, 2.4rem); border-bottom: 3px solid var(--nb-fg); transition: color var(--t-fast), border-color var(--t-fast); }
+.contact-email:hover { color: var(--nb-coral); border-color: var(--nb-coral); }
+
+/* ==========================================================================
+   CREDENTIALS
+   ========================================================================== */
+.student-grid { display: grid; grid-template-columns: auto 1fr; align-items: start; gap: 2.5rem; }
+@media (max-width: 768px) { .student-grid { grid-template-columns: 1fr; } }
+.edu-card { min-width: 240px; padding: 1.5rem; background: var(--nb-purple); border: var(--nb-border-w) solid var(--nb-border); border-radius: var(--nb-radius); box-shadow: var(--nb-shadow); }
+.edu-degree { margin: .5rem 0 .3rem; font-family: var(--font-display); font-size: 1.3rem; line-height: 1.1; }
+.edu-school { margin-bottom: .15rem; font-size: .9rem; opacity: .7; }
+.edu-year { margin-bottom: 1rem; font-family: var(--font-mono); font-size: .7rem; opacity: .5; }
+.edu-specs { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .85rem; }
+.edu-spec { display: inline-block; padding: .2rem .6rem; font-family: var(--font-mono); font-size: .67rem; letter-spacing: .04em; background: #ffffff4d; border: var(--nb-border-w) solid var(--nb-border); border-radius: 4px; }
+.cred-subhead { margin-bottom: 1.2rem; font-family: var(--font-mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .18em; opacity: .4; }
+.skills-cloud { display: flex; flex-wrap: wrap; gap: .65rem; }
+.skill-tag { display: inline-block; padding: .35rem .82rem; font-family: var(--font-mono); font-size: .73rem; border: var(--nb-border-w) solid var(--nb-border); border-radius: 100px; box-shadow: 3px 3px 0 var(--nb-border); cursor: default; transition: transform var(--t-med) var(--ease-spring), background var(--t-fast); }
+.skill-tag:hover { background: var(--nb-yellow); transform: rotate(-2.5deg) scale(1.1); }
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.nb-footer { border-top: var(--nb-border-w) solid var(--nb-border); }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; max-width: 1200px; margin: 0 auto; padding: 2rem; }
+.footer-copy, .footer-built { font-family: var(--font-mono); font-size: .7rem; opacity: .4; }
+</style>
+</head>
+
+<body>
+  <!-- Custom cursor (don't edit) -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- =====================================================================
+       NAVBAR
+       ✏️ TEXT: logo (PORT + FOLIO), nav labels, button text
+       🔗 LINKS: href="#section-id" scrolls to a section
+       ===================================================================== -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="#hero" class="nb-logo">PORT<span class="nb-logo-accent">FOLIO</span></a>
+      <div class="navbar-links">
+        <a href="#work" class="nb-nav-link">work</a>
+        <a href="#inspiration" class="nb-nav-link">inspiration</a>
+        <a href="#credentials" class="nb-nav-link">credentials</a>
+        <a href="#socials" class="nb-nav-link">socials</a>
+      </div>
+      <a href="#socials" class="nb-btn nb-btn--sm">Let's Talk →</a>
+    </div>
+  </nav>
+
+  <!-- =====================================================================
+       HERO
+       ===================================================================== -->
+  <section class="hero-section" id="hero">
+    <div>
+      <!-- ✏️ TEXT: small badges -->
+      <div class="hero-badges">
+        <span class="nb-badge nb-badge--yellow">✦ Available for work</span>
+        <span class="nb-badge nb-badge--teal">✦ Based in Canberra</span>
+      </div>
+
+      <!-- ✏️ TEXT: headline. Line 1 animates word-by-word; line 2 is the coloured line -->
+      <h1 class="hero-headline">
+        <span class="kinetic">Industrial, Graphic, Technology, Experimental</span>
+        <span class="hero-headline-line2"><span class="kinetic">Designer</span></span>
+      </h1>
+
+      <!-- ✏️ TEXT: intro paragraph -->
+      <p class="hero-sub reveal">Creative design student crafting bold, experimental work across graphic, industrial, and digital mediums. Every detail is an opportunity.</p>
+
+      <!-- ✏️ TEXT + 🔗 LINKS: buttons -->
+      <div class="hero-actions reveal">
+        <a href="#work" class="nb-btn nb-btn--primary">View My Work ↓</a>
+        <a href="./eva-fuhrman-portfolio.html" download class="nb-btn nb-btn--outline">Download HTML</a>
+      </div>
+
+      <!-- ✏️ TEXT: stickers. 🎨 Colour: change the "nb-sticker--xxx" word (purple, coral, yellow, teal) -->
+      <div class="hero-deco">
+        <span class="nb-sticker nb-sticker--purple">Designer</span>
+        <span class="nb-sticker nb-sticker--coral">Student</span>
+        <span class="nb-sticker nb-sticker--yellow">High Distinction</span>
+        <span class="nb-sticker nb-sticker--teal">3+ Yrs Exp.</span>
+      </div>
+    </div>
+
+    <div class="hero-image-col">
+      <div class="hero-frame">
+        <!-- 🖼️ IMAGE LINK: change src (any image URL or local file path). alt = description for screen readers -->
+        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&h=720&fit=crop&auto=format" alt="Abstract creative work">
+        <!-- ✏️ TEXT: caption under the image -->
+        <div class="hero-frame-cap">Eva Fuhrman · Designer</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SELECTED WORK
+       ✏️ Each <div class="work-card"> is one project. Copy/paste a whole card to add one.
+       🎨 CARD COLOUR: --card-color and --tag-color in style="" (use var(--nb-coral) / purple / yellow / teal / pink / lime, or any hex)
+       🖼️ IMAGE LINK: the <img src="">
+       ===================================================================== -->
+  <section class="section" id="work">
+    <div class="section-header reveal">
+      <span class="section-label">Selected Work</span>
+      <h2 class="section-title">Projects That <em>Pop</em></h2>
+    </div>
+
+    <div class="work-grid stagger">
+
+      <!-- PROJECT 1 -->
+      <div class="work-card reveal" style="--card-color: var(--nb-coral);">
+        <div class="work-card-image">
+          <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=400&fit=crop&auto=format" alt="Brand Identity System" loading="lazy">
+          <span class="work-card-year">2024</span>
+        </div>
+        <div class="work-card-body">
+          <h3 class="work-card-title">Brand Identity System</h3>
+          <div class="work-card-tags">
+            <span class="nb-tag" style="--tag-color: var(--nb-coral);">Branding</span>
+            <span class="nb-tag" style="--tag-color: var(--nb-coral);">Visual Design</span>
+          </div>
+          <span class="work-card-cta">View Case Study →</span>
+        </div>
+      </div>
+
+      <!-- PROJECT 2 -->
+      <div class="work-card reveal" style="--card-color: var(--nb-purple);">
+        <div class="work-card-image">
+          <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=600&h=400&fit=crop&auto=format" alt="E-Commerce Platform Redesign" loading="lazy">
+          <span class="work-card-year">2024</span>
+        </div>
+        <div class="work-card-body">
+          <h3 class="work-card-title">E-Commerce Platform Redesign</h3>
+          <div class="work-card-tags">
+            <span class="nb-tag" style="--tag-color: var(--nb-purple);">UI/UX</span>
+            <span class="nb-tag" style="--tag-color: var(--nb-purple);">Development</span>
+          </div>
+          <span class="work-card-cta">View Case Study →</span>
+        </div>
+      </div>
+
+      <!-- PROJECT 3 -->
+      <div class="work-card reveal" style="--card-color: var(--nb-yellow);">
+        <div class="work-card-image">
+          <img src="https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=600&h=400&fit=crop&auto=format" alt="Motion Graphics Reel" loading="lazy">
+          <span class="work-card-year">2023</span>
+        </div>
+        <div class="work-card-body">
+          <h3 class="work-card-title">Motion Graphics Reel</h3>
+          <div class="work-card-tags">
+            <span class="nb-tag" style="--tag-color: var(--nb-yellow);">Animation</span>
+            <span class="nb-tag" style="--tag-color: var(--nb-yellow);">Motion</span>
+          </div>
+          <span class="work-card-cta">View Case Study →</span>
+        </div>
+      </div>
+
+      <!-- PROJECT 4 -->
+      <div class="work-card reveal" style="--card-color: var(--nb-teal);">
+        <div class="work-card-image">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&auto=format" alt="Interactive Data Dashboard" loading="lazy">
+          <span class="work-card-year">2023</span>
+        </div>
+        <div class="work-card-body">
+          <h3 class="work-card-title">Interactive Data Dashboard</h3>
+          <div class="work-card-tags">
+            <span class="nb-tag" style="--tag-color: var(--nb-teal);">Dev</span>
+            <span class="nb-tag" style="--tag-color: var(--nb-teal);">Data Viz</span>
+          </div>
+          <span class="work-card-cta">View Case Study →</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       INSPIRATION SHELF
+       ✏️ TEXT: heading + description below.
+       📚 The books / movies / videos themselves are edited in the <script>
+          at the bottom of this file (search for "SHELF DATA").
+       ===================================================================== -->
+  <div class="shelf-section" id="inspiration">
+    <div class="shelf-section-inner">
+      <div class="shelf-header-row section-header reveal">
+        <span class="section-label">Inspiration Board</span>
+        <h2 class="section-title">My <em>Collection</em></h2>
+        <p class="shelf-desc">Inspiration and culture shouldn't be gate-kept, here are some media works that have inspired my work and world view!</p>
+      </div>
+
+      <div class="collection-shelf reveal">
+        <div class="collection-header">
+          <span class="collection-header-title">My Collection</span>
+          <span class="collection-header-count" id="item-count"></span>
+        </div>
+        <div class="collection-body">
+          <div class="sub-shelf">
+            <div class="sub-shelf-titlerow"><span class="sub-shelf-label">📖 Books</span><button class="sub-shelf-add" data-add="books">+ Add</button></div>
+            <div class="sub-shelf-items" id="shelf-books"></div>
+          </div>
+          <div class="sub-shelf">
+            <div class="sub-shelf-titlerow"><span class="sub-shelf-label">🎬 Movies</span><button class="sub-shelf-add" data-add="movies">+ Add</button></div>
+            <div class="sub-shelf-items" id="shelf-movies"></div>
+          </div>
+          <div class="sub-shelf">
+            <div class="sub-shelf-titlerow"><span class="sub-shelf-label">▶ Videos</span><button class="sub-shelf-add" data-add="videos">+ Add</button></div>
+            <div class="sub-shelf-items sub-shelf-items--video" id="shelf-videos"></div>
+          </div>
+        </div>
+        <div class="shelf-plank"></div>
+      </div>
+    </div>
+
+    <!-- ✏️ TEXT: scrolling banner words (add/remove <span class="marquee-item"> lines) -->
+    <div class="marquee-wrap reverse"><div class="marquee-track">
+      <span class="marquee-item">BRUTALISM<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">MEMPHIS<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">SWISS DESIGN<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">DE STIJL<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">BAUHAUS<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">NEO-POP<span class="marquee-gem"> ✦</span></span>
+    </div></div>
+  </div>
+
+  <!-- =====================================================================
+       SOCIALS / CONTACT
+       ✏️ TEXT: platform name + handle
+       🔗 LINK: replace href="#" with the real profile URL
+       🎨 COLOUR: --card-color
+       ===================================================================== -->
+  <section class="section" id="socials">
+    <div class="section-header reveal">
+      <span class="section-label">Connect</span>
+      <h2 class="section-title">Let's Build <em>Together</em></h2>
+    </div>
+
+    <div class="socials-list stagger">
+      <a href="#" class="social-row reveal" style="--card-color: var(--nb-coral);">
+        <span class="social-platform">Instagram</span>
+        <span class="social-handle">@eva.fuhrman</span>
+        <span class="social-arrow">→</span>
+      </a>
+      <a href="#" class="social-row reveal" style="--card-color: var(--nb-pink);">
+        <span class="social-platform">Pinterest</span>
+        <span class="social-handle">pinterest.com/evafuhrman</span>
+        <span class="social-arrow">→</span>
+      </a>
+      <a href="#" class="social-row reveal" style="--card-color: var(--nb-purple);">
+        <span class="social-platform">LinkedIn</span>
+        <span class="social-handle">eva-fuhrman-design</span>
+        <span class="social-arrow">→</span>
+      </a>
+    </div>
+
+    <!-- ✏️ TEXT + 🔗 LINK: email (change both the mailto: address and the visible text) -->
+    <div class="contact-cta reveal">
+      <p>or reach me directly at</p>
+      <a href="mailto:eva@portfolio.design" class="contact-email">eva@portfolio.design</a>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       CREDENTIALS
+       ===================================================================== -->
+  <section class="section" id="credentials">
+    <div class="section-header reveal">
+      <span class="section-label">Background</span>
+      <h2 class="section-title">My Credentials</h2>
+    </div>
+
+    <div class="student-grid">
+      <!-- ✏️ TEXT: education card. 🎨 Card colour: .edu-card { background } in the CSS -->
+      <div class="edu-card reveal">
+        <span class="section-label" style="opacity: .5;">Education</span>
+        <div class="edu-degree">Bachelor of Design</div>
+        <div class="edu-school">University of Canberra</div>
+        <div class="edu-year">Expected Class of 2029</div>
+        <div style="margin-top: 1rem;"><span class="nb-badge nb-badge--yellow">High Distinction</span></div>
+        <div class="edu-specs">
+          <span class="edu-spec">Industrial</span>
+          <span class="edu-spec">Graphic</span>
+          <span class="edu-spec">Technology</span>
+          <span class="edu-spec">Experimental</span>
+        </div>
+      </div>
+
+      <!-- ✏️ TEXT: skills (add/remove <span class="skill-tag"> lines) -->
+      <div class="reveal">
+        <p class="cred-subhead">Skills &amp; Tools</p>
+        <div class="skills-cloud">
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">Adobe Suite</span>
+          <span class="skill-tag">Procreate</span>
+          <span class="skill-tag">Blender</span>
+          <span class="skill-tag">HTML / CSS</span>
+          <span class="skill-tag">Typography</span>
+          <span class="skill-tag">Brand Identity</span>
+          <span class="skill-tag">User Research</span>
+          <span class="skill-tag">Prototyping</span>
+          <span class="skill-tag">Motion Design</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       FOOTER
+       ===================================================================== -->
+  <footer class="nb-footer">
+    <!-- ✏️ TEXT: scrolling banner words -->
+    <div class="marquee-wrap"><div class="marquee-track">
+      <span class="marquee-item">DESIGN<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">CODE<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">CREATE<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">ITERATE<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">SHIP<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">REPEAT<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">MAKE<span class="marquee-gem"> ✦</span></span>
+      <span class="marquee-item">BREAK<span class="marquee-gem"> ✦</span></span>
+    </div></div>
+    <div class="footer-inner">
+      <span class="nb-logo">PORT<span class="nb-logo-accent">FOLIO</span></span>
+      <span class="footer-copy">© 2024 Eva Fuhrman. All rights reserved.</span>
+      <span class="footer-built">Built with ♥ &amp; caffeine</span>
+    </div>
+  </footer>
+
+<script>
+/* ==========================================================================
+   📚 SHELF DATA — edit the Inspiration Board items here
+   --------------------------------------------------------------------------
+   color  : any CSS colour. Use "var(--nb-coral)" etc. or a hex like "#ff0000"
+   BOOKS  : h = height in px, w = width in px, italic/display = optional style
+   MOVIES : color = case colour (dark), accent = top stripe colour
+   VIDEOS : just title / year / color
+   ========================================================================== */
+var BOOKS = [
+  { id: "b1", title: "The Design of Everyday Things", year: "1988", color: "var(--nb-coral)",  h: 188, w: 44 },
+  { id: "b2", title: "Thinking with Type",            year: "2004", color: "var(--nb-purple)", h: 150, w: 38, italic: true },
+  { id: "b3", title: "Grid Systems",                  year: "1961", color: "var(--nb-yellow)", h: 205, w: 64, display: true },
+  { id: "b4", title: "Just My Type",                  year: "2011", color: "var(--nb-teal)",   h: 162, w: 46 },
+  { id: "b5", title: "How to See",                    year: "2016", color: "var(--nb-pink)",   h: 138, w: 54, italic: true }
+];
+var MOVIES = [
+  { id: "m1", title: "Blade Runner 2049",     year: "2017", color: "#0D0D1A", accent: "var(--nb-purple)" },
+  { id: "m2", title: "Everything Everywhere", year: "2022", color: "#1A0D0D", accent: "var(--nb-coral)" },
+  { id: "m3", title: "Amélie",                year: "2001", color: "#0D1A0F", accent: "var(--nb-lime)" },
+  { id: "m4", title: "Her",                   year: "2013", color: "#1A100D", accent: "var(--nb-yellow)" },
+  { id: "m5", title: "Ghost World",           year: "2001", color: "#0D0D0D", accent: "var(--nb-teal)" }
+];
+var VIDEOS = [
+  { id: "v1", title: "Rams",                    year: "2018", color: "var(--nb-teal)" },
+  { id: "v2", title: "Abstract: Art of Design", year: "2017", color: "var(--nb-coral)" },
+  { id: "v3", title: "Objectified",             year: "2009", color: "var(--nb-purple)" },
+  { id: "v4", title: "Helvetica",               year: "2007", color: "var(--nb-yellow)" },
+  { id: "v5", title: "The Art of Code",         year: "2020", color: "var(--nb-pink)" }
+];
+/* Colour choices shown in the "+ Add" form */
+var SWATCHES = ["var(--nb-coral)", "var(--nb-purple)", "var(--nb-yellow)", "var(--nb-teal)", "var(--nb-pink)", "var(--nb-lime)"];
+
+/* ==========================================================================
+   ⚙️ SITE BEHAVIOUR — no need to edit below this line
+   ========================================================================== */
+function el(tag, cls, text, style) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  if (style) for (var k in style) e.style.setProperty(k, style[k]);
+  return e;
+}
+
+/* --- Custom cursor --- */
+(function () {
+  var dot = document.querySelector(".cursor-dot"), ring = document.querySelector(".cursor-ring");
+  var m = { x: 0, y: 0 }, r = { x: 0, y: 0 };
+  window.addEventListener("mousemove", function (e) { m.x = e.clientX; m.y = e.clientY; });
+  (function loop() {
+    r.x += (m.x - r.x) * .13; r.y += (m.y - r.y) * .13;
+    dot.style.transform = "translate(" + (m.x - 4) + "px," + (m.y - 4) + "px)";
+    ring.style.transform = "translate(" + (r.x - 15) + "px," + (r.y - 15) + "px)";
+    requestAnimationFrame(loop);
+  })();
+  var sel = "a,button,.nb-btn,.nb-sticker,.work-card,.social-row,.skill-tag,.color-swatch,.book-spine,.dvd-case,.video-card";
+  function hover(e, on) { if (e.target.closest && e.target.closest(sel)) { dot.classList.toggle("hovered", on); ring.classList.toggle("hovered", on); } }
+  window.addEventListener("mouseover", function (e) { hover(e, true); });
+  window.addEventListener("mouseout", function (e) { hover(e, false); });
+})();
+
+/* --- Kinetic headline (splits .kinetic text into animated words) --- */
+document.querySelectorAll(".kinetic").forEach(function (node) {
+  var text = node.textContent.trim();
+  node.setAttribute("aria-label", text);
+  node.textContent = "";
+  text.split(" ").forEach(function (w, i) {
+    var s = el("span", "kinetic-word", w + " ");
+    s.style.animationDelay = (i * 0.085) + "s";
+    node.appendChild(s);
+  });
+});
+
+/* --- Marquees (duplicate the items so the loop is seamless) --- */
+document.querySelectorAll(".marquee-track").forEach(function (t) { t.innerHTML += t.innerHTML; });
+
+/* --- Scroll reveal --- */
+var revealObs = new IntersectionObserver(function (entries) {
+  entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("revealed"); revealObs.unobserve(en.target); } });
+}, { threshold: .08 });
+document.querySelectorAll(".reveal").forEach(function (n) { revealObs.observe(n); });
+
+/* --- Navbar: background on scroll + active link --- */
+(function () {
+  var nav = document.querySelector(".navbar");
+  window.addEventListener("scroll", function () { nav.classList.toggle("scrolled", window.scrollY > 24); }, { passive: true });
+  var links = document.querySelectorAll(".nb-nav-link");
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) links.forEach(function (a) { a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id); });
+    });
+  }, { rootMargin: "-35% 0px -35% 0px", threshold: 0 });
+  ["work", "inspiration", "credentials", "socials"].forEach(function (id) { var s = document.getElementById(id); if (s) obs.observe(s); });
+})();
+
+/* --- Inspiration shelf (render, add, remove) --- */
+var shelves = {
+  books:  { data: BOOKS,  box: document.getElementById("shelf-books"),  prefix: "bk" },
+  movies: { data: MOVIES, box: document.getElementById("shelf-movies"), prefix: "mv" },
+  videos: { data: VIDEOS, box: document.getElementById("shelf-videos"), prefix: "vd" }
+};
+var openForm = null;
+
+function removeBtn(kind, id) {
+  var b = el("button", "item-remove", "×");
+  b.setAttribute("aria-label", "Remove");
+  b.onclick = function () { shelves[kind].data = shelves[kind].data.filter(function (i) { return i.id !== id; }); renderShelves(); };
+  return b;
+}
+function bookEl(i) {
+  var d = el("div", "book-spine", null, { "--item-color": i.color, "--book-h": i.h + "px", "--book-w": i.w + "px" });
+  d.title = i.title;
+  var t = el("div", "book-title", i.title);
+  t.style.fontStyle = i.italic ? "italic" : "normal";
+  t.style.fontFamily = i.display ? "var(--font-display)" : "var(--font-body)";
+  t.style.fontWeight = i.display ? "900" : "600";
+  t.style.fontSize = i.w > 55 ? ".72rem" : ".58rem";
+  d.appendChild(t);
+  if (i.year) d.appendChild(el("div", "book-year", i.year));
+  d.appendChild(removeBtn("books", i.id));
+  return d;
+}
+function movieEl(i) {
+  var d = el("div", "dvd-case", null, { "--item-color": i.color, "--accent-color": i.accent });
+  d.title = i.title;
+  d.appendChild(el("div", "dvd-accent-bar"));
+  var disc = el("div", "dvd-disc"); disc.appendChild(el("div", "dvd-disc-inner")); d.appendChild(disc);
+  var info = el("div", "dvd-info"); info.appendChild(el("div", "dvd-title", i.title)); info.appendChild(el("div", "dvd-year", i.year)); d.appendChild(info);
+  d.appendChild(removeBtn("movies", i.id));
+  return d;
+}
+function videoEl(i) {
+  var d = el("div", "video-card", null, { "--item-color": i.color });
+  d.title = i.title;
+  d.appendChild(el("div", "video-play-btn", "▶"));
+  d.appendChild(el("div", "video-title-bar", i.title));
+  d.appendChild(removeBtn("videos", i.id));
+  return d;
+}
+function formEl(kind) {
+  var color = SWATCHES[0];
+  var f = el("div", "shelf-add-form");
+  var title = el("input", "nb-input"); title.placeholder = "Title…";
+  var year = el("input", "nb-input"); year.placeholder = "Year"; year.maxLength = 4;
+  var sw = el("div", "color-swatches");
+  SWATCHES.forEach(function (c) {
+    var b = el("button", "color-swatch" + (c === color ? " active" : "")); b.style.background = c;
+    b.onclick = function () { color = c; Array.prototype.forEach.call(sw.children, function (x) { x.classList.toggle("active", x === b); }); };
+    sw.appendChild(b);
+  });
+  function submit() {
+    var t = title.value.trim(); if (!t) return;
+    var item = { id: shelves[kind].prefix + "-" + Date.now(), title: t, year: year.value.trim(), color: color };
+    if (kind === "books") { item.h = 155 + Math.random() * 50; item.w = 40 + Math.random() * 22; }
+    if (kind === "movies") { item.accent = color; item.color = "#111"; }
+    shelves[kind].data.push(item); openForm = null; renderShelves();
+  }
+  function keys(e) { if (e.key === "Enter") submit(); if (e.key === "Escape") { openForm = null; renderShelves(); } }
+  title.onkeydown = keys; year.onkeydown = keys;
+  var actions = el("div", "form-actions");
+  var add = el("button", "nb-btn nb-btn--primary", "Add"); add.onclick = submit;
+  var cancel = el("button", "nb-btn nb-btn--outline", "✕"); cancel.onclick = function () { openForm = null; renderShelves(); };
+  actions.appendChild(add); actions.appendChild(cancel);
+  [title, year, sw, actions].forEach(function (n) { f.appendChild(n); });
+  setTimeout(function () { title.focus(); }, 0);
+  return f;
+}
+function renderShelves() {
+  var makers = { books: bookEl, movies: movieEl, videos: videoEl }, total = 0;
+  Object.keys(shelves).forEach(function (kind) {
+    var s = shelves[kind]; s.box.innerHTML = "";
+    s.data.forEach(function (i) { s.box.appendChild(makers[kind](i)); });
+    if (openForm === kind) s.box.appendChild(formEl(kind));
+    total += s.data.length;
+  });
+  document.getElementById("item-count").textContent = total + " items";
+}
+document.querySelectorAll("[data-add]").forEach(function (b) {
+  b.onclick = function () { var k = b.getAttribute("data-add"); openForm = openForm === k ? null : k; renderShelves(); };
+});
+renderShelves();
+</script>
+</body>
+</html>
